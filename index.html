@@ -243,6 +243,16 @@ button,a.button{-webkit-tap-highlight-color:transparent;touch-action:manipulatio
  #settings .dialog-actions .button{flex:1 1 45%;min-height:44px;white-space:normal}
  .registry-guidance{font-size:11px;padding:11px}.registry-share-note{font-size:11px}
 }
+</style><style>
+.roster-sharing{margin-top:22px;padding:18px;border:1px solid #c9e0ec;border-radius:7px;background:#eff7fb}
+#settings .roster-sharing h3{margin:0 0 7px;font-size:14px;color:#284c69}
+.roster-sharing p{font-size:12px;line-height:1.8;color:#617d93;margin:0 0 13px}
+.roster-sharing small{display:block;font-size:11px;color:#6f8a9e;margin-top:10px;line-height:1.7}
+.roster-sharing .button{min-height:44px}
+#roster-share-dialog{width:min(650px,calc(100vw - 28px))}
+#roster-link{display:block;width:100%;margin:9px 0 0;padding:12px;border:1px solid #c8dce9;border-radius:5px;font-size:13px;line-height:1.6;color:#345b78;background:#f6fafc;resize:vertical;overflow-wrap:anywhere}
+#roster-share-dialog .dialog-actions{justify-content:flex-start;flex-wrap:wrap}
+@media(max-width:600px){#roster-link{font-size:16px}#roster-share-dialog .button{min-height:44px}.roster-sharing{padding:15px}#download-dialog .dialog-actions{flex-wrap:wrap}}
 </style></head>
 <body>
 <template id="offline-shell">
@@ -266,18 +276,19 @@ button,a.button{-webkit-tap-highlight-color:transparent;touch-action:manipulatio
     <footer><span>RISE · Superior Energy Services</span><span>Acesso por link · Notas neste navegador · Exportação para RH</span></footer>
   </div>
 </div>
-<dialog id="settings"><form id="settings-form"><div class="dialog-top"><div><div class="eyebrow">PREPARAR A SESSÃO</div><h2>Cadastros e apresentação</h2></div><button type="button" class="icon-button" data-close="" aria-label="Fechar">×</button></div><p class="muted">Os nomes ficam neste navegador. Importe o mesmo cadastro da banca em todos os dispositivos antes de começar. Os identificadores são mantidos para consolidar as avaliações.</p><button type="button" class="button secondary" id="import-registry-settings">Importar cadastro da banca (JSON)</button><div class="two-fields"><label>Data da avaliação<input id="session-date" type="date" required=""></label><label>Formato da apresentação<select id="presentation"><option value="group">Defesa do case em grupo</option><option value="individual">Apresentação individual</option></select></label></div><p class="registry-guidance">Use <b>Retirar</b> para remover alguém da sessão e do comparativo. As notas ficam preservadas e podem ser recuperadas em <b>Restaurar</b>. Clique em <b>Salvar configuração</b> para aplicar.</p><p id="registry-counts" class="registry-counts" role="status"></p><h3>Avaliadores</h3><div id="evaluator-settings" class="settings-list"></div><button type="button" class="text-button" id="add-evaluator">+ Adicionar avaliador</button><h3>Candidatas</h3><div class="settings-labels"><span>ID</span><span>Nome</span><span>Grupo</span><span class="sr-only">Ação</span></div><div id="candidate-settings" class="settings-list"></div><button type="button" class="text-button" id="add-candidate">+ Adicionar candidata</button><details id="retired-section" class="retired-section" hidden><summary>Retirados da sessão (<span id="retired-count">0</span>)</summary><p class="muted">Fora da avaliação, do comparativo e dos CSVs. Restaurar recupera o cadastro e suas notas ao salvar.</p><div id="retired-settings"></div></details><p class="registry-share-note">Para atualizar a banca em outros dispositivos antes das avaliações, exporte o cadastro ou gere um novo formulário.</p><div class="dialog-actions"><button class="button secondary" id="export-registry" type="submit">Exportar cadastro (JSON)</button><button type="button" data-close="" class="button secondary">Cancelar</button><button class="button secondary" id="distribute-form" type="submit">Gerar formulário da banca</button><button class="button primary" type="submit">Salvar configuração</button></div></form></dialog>
+<dialog id="settings"><form id="settings-form"><div class="dialog-top"><div><div class="eyebrow">PREPARAR A SESSÃO</div><h2>Cadastros e apresentação</h2></div><button type="button" class="icon-button" data-close="" aria-label="Fechar">×</button></div><p class="muted"><b>Salvar configuração</b> guarda os nomes apenas neste navegador. Para enviar os nomes para outra pessoa, use <b>Gerar link da banca</b>. Os identificadores são mantidos para consolidar as avaliações.</p><button type="button" class="button secondary" id="import-registry-settings">Importar cadastro da banca (JSON)</button><div class="two-fields"><label>Data da avaliação<input id="session-date" type="date" required=""></label><label>Formato da apresentação<select id="presentation"><option value="group">Defesa do case em grupo</option><option value="individual">Apresentação individual</option></select></label></div><p class="registry-guidance">Use <b>Retirar</b> para remover alguém da sessão e do comparativo. As notas ficam preservadas e podem ser recuperadas em <b>Restaurar</b>. Clique em <b>Salvar configuração</b> para aplicar.</p><p id="registry-counts" class="registry-counts" role="status"></p><h3>Avaliadores</h3><div id="evaluator-settings" class="settings-list"></div><button type="button" class="text-button" id="add-evaluator">+ Adicionar avaliador</button><h3>Candidatas</h3><div class="settings-labels"><span>ID</span><span>Nome</span><span>Grupo</span><span class="sr-only">Ação</span></div><div id="candidate-settings" class="settings-list"></div><button type="button" class="text-button" id="add-candidate">+ Adicionar candidata</button><details id="retired-section" class="retired-section" hidden><summary>Retirados da sessão (<span id="retired-count">0</span>)</summary><p class="muted">Fora da avaliação, do comparativo e dos CSVs. Restaurar recupera o cadastro e suas notas ao salvar.</p><div id="retired-settings"></div></details><section class="roster-sharing"><h3>Enviar a banca com os nomes</h3><p>Gere um link com este cadastro e envie aos avaliadores. Cada pessoa abre o link e seleciona seu nome. As notas ficam em cada navegador.</p><button class="button primary" id="share-roster" type="submit">Gerar link da banca</button><small>Inclui nomes, grupos e data. As avaliações não entram no link.</small></section><div class="dialog-actions"><button class="button secondary" id="export-registry" type="submit">Exportar cadastro (JSON)</button><button type="button" data-close="" class="button secondary">Cancelar</button><button class="button secondary" id="distribute-form" type="submit">Baixar formulário (HTML)</button><button class="button primary" type="submit">Salvar configuração</button></div></form></dialog>
 <dialog id="confirm-dialog"><div class="dialog-top"><h2 id="confirm-title"></h2><button type="button" data-close="" class="icon-button" aria-label="Fechar">×</button></div><p id="confirm-body" class="muted"></p><div class="dialog-actions"><button data-close="" class="button secondary">Cancelar</button><button id="confirm-action" class="button primary">Confirmar</button></div></dialog>
 <input id="registry-file" type="file" accept="application/json,.json" hidden=""><input id="import-file" type="file" accept="application/json,.json" hidden="">
 <div id="toast" role="status" aria-live="polite"></div>
 
 <dialog id="offline-guide"><div class="dialog-top"><div><div class="eyebrow">RISE SELECTION SCORECARD</div><h2>Do formulário ao consolidado</h2></div><button data-close="" class="icon-button" aria-label="Fechar instruções">×</button></div>
-<section class="help-section"><h3>1. Preparação pelo RH</h3><ol><li>Abra o endereço da ferramenta no Safari, Google Chrome ou Microsoft Edge. No iPhone, abra o link no Safari. Não é necessário fazer login.</li><li>Antes de preencher notas, clique em <b>Importar cadastro da banca</b> e selecione o JSON fornecido pelo RH. O arquivo é lido localmente, sem envio ao servidor. Em <b>Configurar</b>, confira data, nomes e grupos.</li><li>Compartilhe o endereço e envie separadamente o mesmo arquivo de cadastro à banca pelo canal corporativo aprovado. Cada avaliador importa o cadastro no próprio navegador. O link público mostra apenas identificadores genéricos.</li></ol></section>
+<section class="help-section"><h3>1. Preparação pelo RH</h3><ol><li>Abra o endereço da ferramenta no Safari, Google Chrome ou Microsoft Edge. No iPhone, abra o link no Safari. Não é necessário fazer login.</li><li>Em <b>Configurar</b>, confira data, nomes e grupos. <b>Salvar configuração</b> guarda esse cadastro apenas neste navegador. Você também pode importar o JSON fornecido pelo RH.</li><li>Para enviar os nomes, use <b>Configurar → Gerar link da banca → Copiar link da banca</b>. Compartilhe o link gerado com os avaliadores. Ele carrega o mesmo cadastro e não inclui notas. Como alternativa, envie o JSON do cadastro ou o HTML baixado. Baixar um HTML não atualiza o site publicado.</li></ol></section>
 <section class="help-section"><h3>2. Durante a apresentação</h3><ol><li>Selecione seu nome em <b>Avaliador atual</b> e escolha a candidata na lista lateral.</li><li>Registre as cinco notas e evidências individuais. A defesa em grupo não transfere notas entre candidatas. Use N/O quando não houver observação suficiente.</li><li>Clique em <b>Concluir avaliação</b> quando os campos estiverem preenchidos. Somente avaliações concluídas entram no consolidado.</li><li>Para abrir as notas no Excel, use <b>Exportar notas (Excel/CSV)</b>. Para reunir ou recuperar registros na ferramenta, use <b>Exportar para RH (JSON)</b>. Na janela seguinte, clique em <b>Baixar arquivo</b>.</li><li>Guarde o JSON ao longo da sessão e ao final. Confira o arquivo na pasta de downloads e entregue a versão mais recente ao RH pelo canal corporativo aprovado. CSV e JSON têm finalidades diferentes.</li></ol></section>
 <section class="help-section"><h3>3. Consolidação pelo RH</h3><ol><li>Abra a ferramenta com o mesmo cadastro. Acesse <b>Comparativo</b> e <b>Importar avaliações</b>.</li><li>Importe o JSON recebido de cada gestor. O nome do arquivo pode variar; os identificadores e cadastros precisam corresponder.</li><li>Para o mesmo par candidata/avaliador, a atualização mais recente é mantida. Revise a cobertura da banca antes de comparar as posições.</li><li>Use <b>Exportar comparativo (Excel/CSV)</b> ou <b>Notas e evidências (Excel/CSV)</b>. Clique em <b>Baixar arquivo</b> e confira o CSV na pasta de downloads.</li><li>Se o download não iniciar, clique em <b>Copiar para Excel</b>, abra uma planilha vazia, selecione A1 e pressione Ctrl+V. A opção <b>Ver e selecionar os dados</b> permite copiar manualmente com Ctrl+C.</li><li>Guarde também o JSON consolidado para recuperar os registros em outra sessão. Para mudar de dispositivo ou navegador, exporte o JSON antes da troca e importe-o no novo navegador.</li></ol></section>
-<section class="help-section"><h3>Armazenamento e funcionamento</h3><p class="muted">O endereço abre sem login ou instalação. Cálculos e avaliações são processados neste navegador. Não há chamadas à IA, telemetria, envio de notas ao servidor ou sincronização automática. O link público inclui somente identificadores genéricos. Nomes importados ou configurados ficam no navegador e nos arquivos que você exportar.</p><p class="help-note"><b>As notas ficam neste navegador e neste dispositivo.</b> Compartilhar o link não compartilha suas avaliações. Use sempre o mesmo navegador e exporte o JSON ao finalizar. Modo anônimo ou limpeza dos dados do navegador pode apagar registros locais. O JSON é a cópia portátil para recuperação e consolidação pelo RH.</p><p class="muted">Qualquer pessoa com o link pode abrir o formulário genérico. O cadastro da banca e os JSON exportados podem conter nomes e avaliações; compartilhe esses arquivos somente com os destinatários autorizados pelo canal corporativo aprovado.</p></section>
+<section class="help-section"><h3>Armazenamento e funcionamento</h3><p class="muted">O endereço abre sem login ou instalação. Cálculos e avaliações são processados neste navegador. Não há chamadas à IA, telemetria, envio de notas ao servidor ou sincronização automática. O endereço básico mostra identificadores genéricos. O link gerado da banca leva o cadastro nos dados após #banca=, lidos pelo navegador, sem publicar os nomes no repositório do site. Nomes também podem estar nos arquivos que você exportar.</p><p class="help-note"><b>As notas ficam neste navegador e neste dispositivo.</b> O link da banca compartilha o cadastro, sem compartilhar suas avaliações. Use sempre o mesmo navegador e exporte o JSON ao finalizar. Modo anônimo ou limpeza dos dados do navegador pode apagar registros locais. O JSON é a cópia portátil para recuperação e consolidação pelo RH.</p><p class="muted">Qualquer pessoa com o link básico pode abrir o formulário genérico. Quem receber um link da banca poderá ver os nomes incluídos nele. Envie o link da banca e os arquivos com avaliações apenas aos destinatários autorizados. Para atualizar os nomes depois, gere e envie um novo link.</p></section>
 <div class="dialog-actions"><button data-close="" class="button primary">Entendi</button></div></dialog>
-<dialog id="download-dialog"><div class="dialog-top"><h2>Exportar os dados</h2><button data-close="" class="icon-button" aria-label="Fechar download">×</button></div><p class="muted" id="download-description"></p><p id="download-format"></p><p class="help-note">Use <b>Baixar arquivo</b> e confira a pasta de downloads. Esta janela permanece aberta para você tentar a cópia dos dados caso o download não inicie.</p><div class="dialog-actions"><a class="button primary" id="download-link">Baixar arquivo</a><button data-close="" class="button secondary">Fechar</button></div><p id="download-status" role="status" aria-live="polite"></p><section id="copy-section" hidden=""><h3 id="copy-heading">Copiar os dados</h3><p class="muted" id="copy-instructions"></p><button type="button" id="copy-export" class="button secondary">Copiar para Excel</button><details id="export-details"><summary>Ver e selecionar os dados</summary><label class="sr-only" for="export-content">Conteúdo da exportação</label><textarea id="export-content" readonly="" spellcheck="false" aria-label="Conteúdo da exportação"></textarea><p class="muted">Clique no conteúdo, pressione Ctrl+A e Ctrl+C. No Excel, selecione A1 e pressione Ctrl+V.</p></details></section></dialog>
+<dialog id="roster-share-dialog" aria-labelledby="roster-share-title"><div class="dialog-top"><div><div class="eyebrow">COMPARTILHAR A BANCA</div><h2 id="roster-share-title">Link com os nomes configurados</h2></div><button type="button" data-close="" class="icon-button" aria-label="Fechar compartilhamento">×</button></div><p class="muted" id="roster-share-counts"></p><p class="help-note">Este link leva <b>nomes, grupos, data e composição da banca</b>. As notas e evidências ficam fora do link. Quem receber poderá ver esse cadastro.</p><label for="roster-link">Link da banca</label><textarea id="roster-link" readonly spellcheck="false" rows="3"></textarea><div class="dialog-actions"><button type="button" class="button primary" id="copy-roster-link">Copiar link da banca</button><a class="button secondary" id="open-roster-link" target="_blank" rel="noopener noreferrer">Abrir link</a></div><p id="roster-share-status" role="status" class="muted"></p><p class="muted">Envie o link copiado pelo canal utilizado pela banca. Se alterar nomes ou participantes depois, gere e envie um novo link. Salvar a configuração não atualiza links já enviados.</p></dialog>
+<dialog id="download-dialog"><div class="dialog-top"><h2>Exportar os dados</h2><button data-close="" class="icon-button" aria-label="Fechar download">×</button></div><p class="muted" id="download-description"></p><p id="download-format"></p><p class="help-note">Use <b>Baixar arquivo</b> e confira a pasta de downloads. Esta janela permanece aberta para você tentar a cópia dos dados caso o download não inicie.</p><div class="dialog-actions"><a class="button primary" id="download-link">Baixar arquivo</a><button type="button" class="button secondary" id="share-after-html" hidden>Gerar link desta banca</button><button data-close="" class="button secondary">Fechar</button></div><p id="download-status" role="status" aria-live="polite"></p><section id="copy-section" hidden=""><h3 id="copy-heading">Copiar os dados</h3><p class="muted" id="copy-instructions"></p><button type="button" id="copy-export" class="button secondary">Copiar para Excel</button><details id="export-details"><summary>Ver e selecionar os dados</summary><label class="sr-only" for="export-content">Conteúdo da exportação</label><textarea id="export-content" readonly="" spellcheck="false" aria-label="Conteúdo da exportação"></textarea><p class="muted">Clique no conteúdo, pressione Ctrl+A e Ctrl+C. No Excel, selecione A1 e pressione Ctrl+V.</p></details></section></dialog>
 </template>
 <div id="offline-root"></div>
 <script id="offline-seed" type="application/json">{"version": "RISE/1", "modelId": "rise-2026-25-25-20-20-10", "date": "2026-10-23", "presentation": "individual", "mode": "live", "evaluators": [{"id": "G01", "name": "Avaliador 01"}, {"id": "G02", "name": "Avaliador 02"}, {"id": "G03", "name": "Avaliador 03"}, {"id": "G04", "name": "Avaliador 04"}, {"id": "G05", "name": "Avaliador 05"}, {"id": "G06", "name": "Avaliador 06"}], "candidates": [{"id": "C01", "name": "Candidata 01", "group": "A"}, {"id": "C02", "name": "Candidata 02", "group": "A"}, {"id": "C03", "name": "Candidata 03", "group": "A"}, {"id": "C04", "name": "Candidata 04", "group": "A"}, {"id": "C05", "name": "Candidata 05", "group": "A"}, {"id": "C06", "name": "Candidata 06", "group": "B"}, {"id": "C07", "name": "Candidata 07", "group": "B"}, {"id": "C08", "name": "Candidata 08", "group": "B"}, {"id": "C09", "name": "Candidata 09", "group": "B"}, {"id": "C10", "name": "Candidata 10", "group": "B"}], "records": []}</script>
@@ -381,14 +392,41 @@ function applyRegistry(current,incoming){
     candidates:incoming.candidates.map(c=>({id:c.id,name:c.name,group:c.group,...(c.active===false?{active:false}:{})})),
     evaluators:incoming.evaluators.map(e=>({id:e.id,name:e.name,...(e.active===false?{active:false}:{})})),records:[],mode:'live'});
 }
+const PUBLIC_ROSTER_BASE='https://sebpitstoprog.github.io/rise-scorecard/';
+function rosterView(state){
+  return {version:state.version,modelId:state.modelId,date:state.date,presentation:state.presentation,
+    candidates:state.candidates.map(c=>({id:c.id,name:c.name,group:c.group,active:c.active!==false})).sort((a,b)=>a.id.localeCompare(b.id)),
+    evaluators:state.evaluators.map(e=>({id:e.id,name:e.name,active:e.active!==false})).sort((a,b)=>a.id.localeCompare(b.id))};
+}
+function sameRoster(a,b){return JSON.stringify(rosterView(a))===JSON.stringify(rosterView(b));}
+function encodeRosterLink(state){
+  validateState(state);
+  const registry={...rosterView(state),kind:'RISE_REGISTRY/1',records:[],mode:'live'};
+  let binary='';for(const byte of new TextEncoder().encode(JSON.stringify(registry)))binary+=String.fromCharCode(byte);
+  const token=btoa(binary).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');
+  const link=PUBLIC_ROSTER_BASE+'#banca='+token;
+  if(link.length>8000)throw Error('Cadastro muito extenso para compartilhar por link. Use Exportar cadastro (JSON).');
+  return link;
+}
+function decodeRosterLink(token){
+  if(typeof token!=='string'||!token.length||token.length>8000||!/^[A-Za-z0-9_-]+$/.test(token))throw Error('Link da banca inválido ou incompleto.');
+  let incoming;
+  try{const binary=atob(token.replace(/-/g,'+').replace(/_/g,'/'));incoming=JSON.parse(new TextDecoder('utf-8',{fatal:true}).decode(Uint8Array.from(binary,c=>c.charCodeAt(0))));}catch{throw Error('Link da banca inválido ou incompleto.');}
+  return {...applyRegistry(makeState(),incoming),kind:'RISE_REGISTRY/1'};
+}
+function sharedRosterAction(current,incoming,hasSavedState,initial){
+  if(sameRoster(current,incoming))return 'keep';
+  if(current.records.length)return 'blocked';
+  return !hasSavedState||sameRoster(current,initial)?'apply':'confirm';
+}
 function csvCell(v){let s=String(v??'');if(/^[\s]*[=+@\-]/.test(s))s="'"+s;return '"'+s.replace(/"/g,'""')+'"';}
 
 /* RISE_APP */
 const $=id=>document.getElementById(id),KEY='rise_scorecard_private_2026_v1';
 const fmt=n=>n===null?'⋯':n.toLocaleString('pt-BR',{minimumFractionDigits:1,maximumFractionDigits:1});
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-let state=validateState(JSON.parse($('offline-seed').textContent)),view='evaluate',evaluatorId='G01',candidateId='C01',groupFilter='all',comparisonEvaluator='all',comparisonGroup='all',demo=false,realState=null,storageError=false,settingsDraft;
-try{const raw=localStorage.getItem(KEY);if(raw)state=validateState(JSON.parse(raw));localStorage.setItem(KEY+'__probe','1');localStorage.removeItem(KEY+'__probe');}catch(e){storageError=true;$('storage-warning').hidden=false;$('storage-warning').textContent='Armazenamento local indisponível ou dados salvos incompatíveis. A ferramenta continua funcionando nesta sessão. Exporte o JSON antes de fechar; sem ele, seus registros podem ser perdidos.';}
+let state=validateState(JSON.parse($('offline-seed').textContent)),view='evaluate',evaluatorId='G01',candidateId='C01',groupFilter='all',comparisonEvaluator='all',comparisonGroup='all',demo=false,realState=null,storageError=false,settingsDraft,hasSavedState=false,sharedRosterLoaded=false;
+try{const raw=localStorage.getItem(KEY);if(raw){state=validateState(JSON.parse(raw));hasSavedState=true;}localStorage.setItem(KEY+'__probe','1');localStorage.removeItem(KEY+'__probe');}catch(e){storageError=true;$('storage-warning').hidden=false;$('storage-warning').textContent='Armazenamento local indisponível ou dados salvos incompatíveis. A ferramenta continua funcionando nesta sessão. Exporte o JSON antes de fechar; sem ele, seus registros podem ser perdidos.';}
 evaluatorId=state.evaluators[0].id;candidateId=state.candidates[0].id;
 function toast(message){$('toast').textContent=message;$('toast').classList.add('show');clearTimeout(toast.timer);toast.timer=setTimeout(()=>$('toast').classList.remove('show'),4300);}
 function persist(){
@@ -431,7 +469,7 @@ function renderEvaluation(){
   const next=activeCandidates[(activeCandidates.findIndex(c=>c.id===candidateId)+1)%activeCandidates.length];
   const date=new Intl.DateTimeFormat('pt-BR',{day:'2-digit',month:'short',year:'numeric',timeZone:'UTC'}).format(new Date(state.date+'T12:00:00Z'));
   $('main').innerHTML=heading('RISE SELECTION SCORECARD / AVALIAÇÃO','Avaliação individual','Registre notas e evidências individuais para cada candidata.',`<button class="button secondary" id="open-compare">Comparativo</button><button class="button secondary" id="export-notes-excel"><svg class="button-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12m-4-4 4 4 4-4M5 16v4h14v-4"/></svg> Exportar notas (Excel/CSV)</button><button class="button primary" id="export-evaluations"><svg class="button-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12m-4-4 4 4 4-4M5 16v4h14v-4"/></svg> Exportar para RH (JSON)</button>`)+
-  (!state.records.length&&!demo?`<div class="demo-callout"><span><b>Preparar a banca.</b> Importe o cadastro recebido do RH antes de avaliar. Os nomes ficam apenas neste navegador.</span><div class="setup-actions"><button class="button primary" id="import-registry-start">Importar cadastro da banca</button><button class="button secondary" id="load-demo">Explorar demonstração ↗</button></div></div>`:'')+
+  (!state.records.length&&!demo?`<div class="demo-callout"><span><b>${sharedRosterLoaded?'Cadastro da banca carregado.':'Preparar a banca.'}</b> ${sharedRosterLoaded?'Selecione seu nome em Avaliador atual e escolha uma candidata para começar.':'Importe o cadastro recebido do RH ou configure os nomes e use Gerar link da banca para compartilhar.'}</span><div class="setup-actions"><button class="button primary" id="import-registry-start">Importar cadastro da banca</button><button class="button secondary" id="load-demo">Explorar demonstração ↗</button></div></div>`:'')+
   `<div class="evaluation-layout"><section class="card rubric"><div class="candidate-header"><div class="candidate-heading"><div class="avatar">${esc(c.id.replace(/^C/,''))}</div><div><h2>${esc(c.name)}</h2><div class="subline"><span class="tag">${c.group?'Grupo '+esc(c.group):'Sem grupo'}</span><span>${state.presentation==='group'?'Defesa do case em grupo':'Apresentação individual'}</span></div></div></div><span class="candidate-date">${esc(date)}</span></div>
   <div class="instruction"><span class="info-symbol">ⓘ</span><span>${final?'<b>Avaliação concluída.</b> Reabra para revisar notas ou evidências.':'A defesa pode ser coletiva. <b>As notas são sempre individuais.</b> Não replique a nota do grupo.'}</span></div>
   <div class="rubric-top"><div class="eyebrow">COMPETÊNCIAS E EVIDÊNCIAS</div><span>Escala de 1 a 5 · Pesos somam 100%</span></div>
@@ -500,7 +538,7 @@ function renderSettings(){
   document.querySelectorAll('[data-retire-e]').forEach(b=>b.onclick=()=>change('evaluators',b.dataset.retireE,false));
   document.querySelectorAll('[data-restore-id]').forEach(b=>b.onclick=()=>change(b.dataset.restoreKind,b.dataset.restoreId,true));
 }
-$('settings-form').onsubmit=e=>{e.preventDefault();settingsDraft.date=$('session-date').value;settingsDraft.presentation=$('presentation').value;for(const key of ['candidates','evaluators'])settingsDraft[key].forEach(x=>{x.name=x.name.trim();if('group'in x)x.group=x.group.trim();});try{validateState(settingsDraft);}catch(e){toast(e.message);return;}state=settingsDraft;persist();$('settings').close();groupFilter='all';comparisonGroup='all';render();if(e.submitter?.id==='distribute-form')exportBlankForm();else if(e.submitter?.id==='export-registry')exportRegistry();else toast('Configuração da sessão atualizada.');};
+$('settings-form').onsubmit=e=>{e.preventDefault();settingsDraft.date=$('session-date').value;settingsDraft.presentation=$('presentation').value;for(const key of ['candidates','evaluators'])settingsDraft[key].forEach(x=>{x.name=x.name.trim();if('group'in x)x.group=x.group.trim();});try{validateState(settingsDraft);}catch(e){toast(e.message);return;}state=settingsDraft;clearSharedRosterLink();persist();$('settings').close();groupFilter='all';comparisonGroup='all';render();if(e.submitter?.id==='distribute-form')exportBlankForm();else if(e.submitter?.id==='export-registry')exportRegistry();else if(e.submitter?.id==='share-roster')showRosterShare();else toast('Configuração salva neste navegador. Para enviar os nomes, use Gerar link da banca.');};
 $('add-evaluator').onclick=()=>{if(settingsDraft.evaluators.length>=200)return;const n=Math.max(0,...settingsDraft.evaluators.map(x=>Number(x.id.replace(/^G/,''))||0))+1;settingsDraft.evaluators.push({id:'G'+String(n).padStart(2,'0'),name:'Avaliador '+String(n).padStart(2,'0')});renderSettings();};
 $('add-candidate').onclick=()=>{if(settingsDraft.candidates.length>=200)return;const n=Math.max(0,...settingsDraft.candidates.map(x=>Number(x.id.replace(/^C/,''))||0))+1;settingsDraft.candidates.push({id:'C'+String(n).padStart(2,'0'),name:'Candidata '+String(n).padStart(2,'0'),group:''});renderSettings();};
 let activeDownloadUrl=null;
@@ -518,8 +556,9 @@ function download(name,content,type,tableRows=null){
   link.href=activeDownloadUrl;link.download=filename;
   $('download-description').textContent=filename;
   const isCsv=!!tableRows,isJson=type==='application/json',isRegistry=name.startsWith('RISE_Cadastro_Banca_');
-  $('download-format').textContent=isCsv?'Formato: CSV compatível com Excel. Use a cópia abaixo para colar diretamente em colunas.':isRegistry?'Formato: cadastro JSON, sem notas. Importe em Configurar → Importar cadastro da banca, antes de começar a avaliar.':isJson?'Formato: JSON com todos os registros, inclusive os de pessoas retiradas, para importar e recuperar avaliações.':'Formato: HTML independente para distribuir o formulário.';
+  $('download-format').textContent=isCsv?'Formato: CSV compatível com Excel. Use a cópia abaixo para colar diretamente em colunas.':isRegistry?'Formato: cadastro JSON, sem notas. Importe em Configurar → Importar cadastro da banca, antes de começar a avaliar.':isJson?'Formato: JSON com todos os registros, inclusive os de pessoas retiradas, para importar e recuperar avaliações.':'Formato: HTML com o cadastro e sem notas. Baixar o arquivo não atualiza o site. Para enviar um endereço, use Gerar link desta banca.';
   $('download-status').textContent='';
+  $('share-after-html').hidden=!name.startsWith('RISE_Formulario_Banca_');
   $('copy-section').hidden=!(isCsv||isJson);
   $('export-details').open=false;
   $('copy-heading').textContent=isCsv?'Alternativa sem download: colar no Excel':'Alternativa: copiar o JSON';
@@ -554,6 +593,39 @@ function exportBackup(){
   download('RISE_Para_RH_'+state.date+'_'+evaluatorId+'_'+stamp+'.json',JSON.stringify(payload,null,2),'application/json');
   toast('JSON preparado. Clique em Baixar arquivo para guardar os registros.');
 }
+function clearSharedRosterLink(){
+  sharedRosterLoaded=false;
+  if(new URLSearchParams(location.hash.slice(1)).has('banca'))try{history.replaceState(null,'',location.pathname+location.search);}catch{}
+}
+function showRosterShare(){
+  if(demo){toast('Saia da demonstração para gerar o link da banca real.');return;}
+  try{
+    const link=encodeRosterLink(state),session=activeSession(state);
+    $('roster-link').value=link;$('open-roster-link').href=link;
+    $('roster-share-counts').textContent=session.candidates.length+' candidata(s) e '+session.evaluators.length+' avaliador(es) ativos. Cadastro preparado sem notas.';
+    $('roster-share-status').textContent='Clique em Copiar link da banca e envie o endereço copiado.';
+    $('roster-share-dialog').showModal();
+  }catch(error){toast(error.message);}
+}
+$('copy-roster-link').onclick=()=>{
+  const field=$('roster-link');field.focus();field.select();field.setSelectionRange(0,field.value.length);
+  let copied=false;try{copied=document.execCommand('copy');}catch{}
+  $('roster-share-status').textContent=copied?'Link copiado. Envie este endereço para os avaliadores.':'Selecione e copie o link acima para enviar aos avaliadores.';
+};
+$('share-after-html').onclick=()=>{$('download-dialog').close();showRosterShare();};
+function receiveRosterLink(){
+  const token=new URLSearchParams(location.hash.slice(1)).get('banca');if(!token)return;
+  try{
+    const incoming=decodeRosterLink(token),action=sharedRosterAction(state,incoming,hasSavedState,JSON.parse($('offline-seed').textContent));
+    if(action==='keep'){sharedRosterLoaded=true;return;}
+    if(action==='blocked'){
+      confirmAction('Este link contém outro cadastro','Este navegador já possui avaliações de uma banca diferente. Seus registros foram mantidos. Exporte o JSON para RH antes de usar outro cadastro, ou abra este link em outro navegador sem avaliações.','Manter meus registros',()=>{});return;
+    }
+    const apply=()=>{state=applyRegistry(state,incoming);sharedRosterLoaded=true;groupFilter='all';comparisonGroup='all';comparisonEvaluator='all';persist();render();toast('Cadastro do link carregado. Selecione seu nome para começar.');};
+    if(action==='apply')apply();
+    else{const session=activeSession(incoming);confirmAction('Usar o cadastro deste link?',session.candidates.length+' candidata(s) e '+session.evaluators.length+' avaliador(es) ativos. O cadastro sem notas salvo neste navegador será substituído.','Usar cadastro do link',apply);}
+  }catch(error){toast('Cadastro do link não carregado. '+error.message);}
+}
 function exportRegistry(){
   download('RISE_Cadastro_Banca_'+state.date+'.json',JSON.stringify(registryPayload(state),null,2),'application/json');
   toast('Cadastro sem notas preparado. Envie o mesmo arquivo para toda a banca.');
@@ -581,7 +653,7 @@ $('registry-file').onchange=async event=>{
   const incoming=validateState(JSON.parse(await file.text()));
   applyRegistry(state,incoming);
   confirmAction('Importar cadastro da banca?',activeSession(incoming).candidates.length+' candidatas e '+activeSession(incoming).evaluators.length+' avaliadores ficarão ativos somente neste navegador. O arquivo não é enviado ao servidor.','Importar cadastro',()=>{
-   try{state=applyRegistry(state,incoming);evaluatorId=state.evaluators[0].id;candidateId=state.candidates[0].id;groupFilter='all';comparisonGroup='all';comparisonEvaluator='all';view='evaluate';persist();render();toast('Cadastro da banca importado neste navegador. Selecione seu nome para começar.');}catch(error){toast(error.message);}
+   try{state=applyRegistry(state,incoming);clearSharedRosterLink();evaluatorId=state.evaluators[0].id;candidateId=state.candidates[0].id;groupFilter='all';comparisonGroup='all';comparisonEvaluator='all';view='evaluate';persist();render();toast('Cadastro da banca importado neste navegador. Selecione seu nome para começar.');}catch(error){toast(error.message);}
   });
  }catch(error){toast('Cadastro não importado. '+error.message);}finally{event.target.value='';}
 };
@@ -608,7 +680,7 @@ $('menu-backdrop').onclick=()=>setMobileMenu(false);
 document.addEventListener('keydown',e=>{if(e.key==='Escape')setMobileMenu(false);});
 document.querySelector('.workspace').addEventListener('click',e=>{if(!e.target.closest('#mobile-menu'))setMobileMenu(false);});
 window.addEventListener('storage',e=>{if(e.key===KEY&&!demo&&e.newValue){try{state=validateState(JSON.parse(e.newValue));if(!state.evaluators.some(x=>x.id===evaluatorId))evaluatorId=state.evaluators[0].id;if(!state.candidates.some(x=>x.id===candidateId))candidateId=state.candidates[0].id;render();toast('Dados atualizados a partir de outra aba deste navegador.');}catch{toast('Outra aba contém dados incompatíveis. Exporte seu backup.');}}});
-render();
+receiveRosterLink();render();
 
 document.querySelector('.rise-brand').onclick=event=>{event.preventDefault();view='evaluate';render();setMobileMenu(false);window.scrollTo({top:0,behavior:'smooth'});};
 
